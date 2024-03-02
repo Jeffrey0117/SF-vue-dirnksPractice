@@ -3,3 +3,6 @@
 ## 技術學習
 
 vue的語法使用
+## Page
+
+[Click here](https://jeffrey0117.github.io/SF-vue-dirnksPractice/)
