@@ -1,0 +1,335 @@
+<html>
+  <head>
+    <title>章節挑戰 - 簡單版</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="images/favicon.ico" rel="shortcut icon" />
+    <meta charset="UTF-8" />
+    <script src="/javascripts/vendor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.37/vue.global.js"></script>
+  </head>
+  <body class="bg-lighter">
+    <div class="container main my-5">
+      <div class="row">
+        <main class="col post">
+          <!-- 章節標題 -->
+          <div class="mb-4">
+            <h1 class="mt-0 text-muted">章節挑戰 - 簡單版</h1>
+            <small>檔名：<code>directive-final-easy.html</code></small>
+          </div>
+          <!-- 🔥🔥練習開始🔥🔥 -->
+          <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ"
+            crossorigin="anonymous"
+          />
+          <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+            crossorigin="anonymous"
+          ></script>
+
+          <div id="app">
+            <div class="container gx-2">
+              <div class="row gx-3 bg-light py-3">
+                <div class="col-md-4">
+                  <div class="list-group">
+                    <a
+                      href="#"
+                      class="list-group-item list-group-item-action"
+                      v-for="x in products"
+                      :key="x.name"
+                      @click.prevent="SelectItems(x)"
+                      :class="{ 'active':itemSelected.name===x.name}"
+                    >
+                      <h6 class="card-title mb-1">{{x.name}}</h6>
+                      <div
+                        class="d-flex align-items-center justify-content-between"
+                      >
+                        <p class="mb-0"><small>{{x.engName}}</small></p>
+                        <p class="mb-0"><small>{{x.price}}</small></p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="card mb-2">
+                    <div
+                      v-if="!itemSelected.name"
+                      class="position-absolute text-white d-flex align-items-center justify-content-center active"
+                      style="
+                        top: 0;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        background-color: rgba(0, 0, 0, 0.65);
+                        z-index: 100;
+                      "
+                    >
+                      請先選擇飲品
+                    </div>
+                    <div class="card-body px-4">
+                      <div class="mb-3">
+                        <label for="productNum" class="form-label">數量</label>
+                        <input
+                          v-model="itemSelected.count"
+                          type="number"
+                          class="form-control"
+                          id="productNum"
+                          placeholder="數量"
+                          min="0"
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label for="productNum" class="form-label d-block"
+                          >冰塊*</label
+                        >
+                        <div
+                          class="form-check form-check-inline"
+                          v-for="(item,key) in iceType"
+                          :key="'ice'+key"
+                        >
+                          <input
+                            class="form-check-input"
+                            name="iceType"
+                            type="radio"
+                            :id="'ice'+key"
+                            :value="item"
+                            v-model="itemSelected.ice"
+                          />
+                          <label class="form-check-label" :for="'ice'+key"
+                            >{{item}}</label
+                          >
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="productNum" class="form-label d-block"
+                          >甜度*</label
+                        >
+                        <div
+                          class="form-check form-check-inline"
+                          v-for="(item,key) in sugarType"
+                          :key="'sweet'+key"
+                        >
+                          <input
+                            class="form-check-input"
+                            name="sugarType"
+                            type="radio"
+                            :id="'sweet'+key"
+                            :value="item"
+                            v-model="itemSelected.sweet"
+                          />
+                          <label class="form-check-label" :for="'sweet'+key"
+                            >{{item}}</label
+                          >
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="productNum" class="form-label d-block"
+                          >加料</label
+                        >
+                        <div
+                          class="form-check form-check-inline"
+                          v-for="(item,key) in toppingsType"
+                          :key="'topping'+key"
+                        >
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            :id="'topping'+key"
+                            :value="item"
+                            v-model="itemSelected.toppings"
+                          />
+                          <label class="form-check-label" :for="'topping'+key"
+                            >{{item}}</label
+                          >
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label for="productNotice" class="form-label"
+                          >備註</label
+                        >
+                        <textarea
+                          class="form-control"
+                          id="productNotice"
+                          rows="2"
+                          v-model="msg"
+                        ></textarea>
+                      </div>
+                      <div class="d-flex gap-2">
+                        <button
+                          class="btn btn-outline-primary w-100"
+                          type="button"
+                          @click="resetOrder()"
+                        >
+                          取消
+                        </button>
+                        <button
+                          class="btn btn-primary w-100"
+                          type="button"
+                          @click="AddtoOder(itemSelected)"
+                        >
+                          加入
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card">
+                    <div class="card-body">
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th scope="col">品項</th>
+                            <th scope="col">冰塊</th>
+                            <th scope="col">甜度</th>
+                            <th scope="col">加料</th>
+                            <th scope="col">單價</th>
+                            <th scope="col">數量</th>
+                            <th scope="col">小計</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr
+                            v-for="(item,key) in orderList"
+                            :key="'order'+key"
+                          >
+                            <th scope="row">
+                              {{item.name}}<br />
+                              <small class="text-muted fw-normal"
+                                >{{item.msg}}</small
+                              >
+                            </th>
+                            <td>{{item.ice}}</td>
+                            <td>{{item.sweet}}</td>
+                            <td>{{item.toppings.toString()}}</td>
+                            <td>{{item.price+item.toppings.length*10}}</td>
+                            <td>{{item.count}}</td>
+                            <td class="text-end">{{item.total}}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <p class="text-end">共 NT${{totalPrice}}元</p>
+                      <button
+                        class="btn btn-sm btn-secondary w-100"
+                        @click="clearAll()"
+                      >
+                        重新選擇
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <script>
+            const App = {
+              data() {
+                return {
+                  msg: "",
+                  totalPrice: 0,
+                  orderList: [],
+                  itemSelected: {},
+                  iceType: ["正常冰", "少冰", "微冰", "去冰", "熱"],
+                  sugarType: ["全糖", "七分", "半糖", "三分", "無糖"],
+                  toppingsType: ["珍珠", "粉條", "小粉圓", "椰果", "芋頭"],
+                  products: [
+                    {
+                      name: "珍珠鮮奶茶",
+                      engName: "Pearl Milk Tea",
+                      price: 60,
+                    },
+                    {
+                      name: "鮮奶茶",
+                      engName: "Milk Tea",
+                      price: 50,
+                    },
+                    {
+                      name: "古意冬瓜茶",
+                      engName: "Winter Melon Drink",
+                      price: 30,
+                    },
+                    {
+                      name: "蜜香紅茶",
+                      engName: "Black Tea",
+                      price: 30,
+                    },
+                    {
+                      name: "包種青茶",
+                      engName: "Black Tea",
+                      price: 35,
+                    },
+                    {
+                      name: "檸檬烏龍",
+                      engName: "Lemon Oolong Tea",
+                      price: 55,
+                    },
+                    {
+                      name: "薑母茶",
+                      engName: "Ginger Tea",
+                      price: 55,
+                    },
+                    {
+                      name: "青草茶",
+                      engName: "Herbal Tea",
+                      price: 35,
+                    },
+                    {
+                      name: "金桔檸檬",
+                      engName: "Kumquat Lemonade",
+                      price: 40,
+                    },
+                    {
+                      name: "柳澄青茶",
+                      engName: "Orange Mountain Tea",
+                      price: 45,
+                    },
+                  ],
+                };
+              },
+              methods: {
+                SelectItems(product) {
+                  this.itemSelected = {
+                    ...product,
+                    toppings: [],
+                    ice: "",
+                    sweet: "",
+                    count: 1,
+                  };
+                },
+                CountTotal() {
+                  this.totalPrice = 0;
+                  this.orderList.forEach((item) => {
+                    this.totalPrice += item.total;
+                  });
+                },
+                resetOrder() {
+                  this.itemSelected = {};
+                  this.msg = "";
+                },
+                clearAll() {
+                  this.orderList = [];
+                  this.totalPrice = 0;
+                },
+                AddtoOder(product) {
+                  const order = {
+                    ...product,
+                    total:
+                      (product.price + product.toppings.length * 10) *
+                      product.count,
+                    msg: this.msg,
+                  };
+                  this.orderList.push(order);
+                  this.CountTotal();
+                  this.resetOrder();
+                },
+              },
+            };
+
+            Vue.createApp(App).mount("#app");
+          </script>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>
