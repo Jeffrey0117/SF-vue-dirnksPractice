@@ -1,1 +1,5 @@
-# SF-vue-dirnksPractice
+# 六角學院Vue，買飲料練習
+
+## 技術學習
+
+vue的語法使用
